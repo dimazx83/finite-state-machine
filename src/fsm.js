@@ -1,11 +1,8 @@
 class FSM {
-    /**
-     * Creates new FSM instance.
-     * @param config
-     */
+
     constructor(config) {
-        this.config = config
-        if (this.config === undefined) throw new Error()
+        this.config = Object.assign({},config)
+        if (config === undefined) throw new Error()
     }
     getState() {
         return this.config.initial
@@ -25,9 +22,8 @@ class FSM {
      * @param event
      */
     trigger(event) {
-        this.config.initial = this.config.states[this.getState()]
-        console.log(this.config.initial)
-        //.transitions[event]
+        if(this.config.states[this.getState()].transitions[event]===undefined) throw new Error()
+        this.config.initial = this.config.states[this.getState()].transitions[event]
     }
 
     /**
@@ -37,32 +33,50 @@ class FSM {
         this.config.initial = 'normal';
     }
 
-    /**
-     * Returns an array of states for which there are specified event transition rules.
-     * Returns all states if argument is undefined.
-     * @param event
-     * @returns {Array}
-     */
-    getStates(event) { }
+    
+    getStates(event) {
+        let arr=[];
+    let c=0;
+    if(event===undefined) return Object.keys(this.config.states)    
+    for(let i in this.config.states){
+      for(let j in this.config.states[i].transitions){ 
+        if(Object.keys(this.config.states[i].transitions).includes(event)){
+          arr.push(i)
+        }
+      }
+    }
+    arr = arr.filter(function(item, pos) {
+      return arr.indexOf(item) == pos;
+  })
+    return arr;
+  }
+     
 
     /**
      * Goes back to previous state.
      * Returns false if undo is not available.
      * @returns {Boolean}
      */
-    undo() { }
+    undo() {
+        if(this.config.initial='initial') return false
+     }
 
     /**
      * Goes redo to state.
      * Returns false if redo is not available.
      * @returns {Boolean}
      */
-    redo() { }
+    redo() {
+        if(this.config.initial='initial') return false
+     }
 
     /**
      * Clears transition history
      */
-    clearHistory() { }
+    clearHistory() {
+       this.config.initial='initial'
+
+     }
 }
 
 module.exports = FSM;
