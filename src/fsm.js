@@ -3,30 +3,39 @@ class FSM {
      * Creates new FSM instance.
      * @param config
      */
-    constructor(config) {}
+    constructor(config) {
+        this.config = config
+        if (this.config === undefined) throw new Error()
+    }
+    getState() {
+        return this.config.initial
+    }
 
-    /**
-     * Returns active state.
-     * @returns {String}
-     */
-    getState() {}
+    changeState(state) {
+        if(this.config.states[state]===undefined) throw new Error()
+        for (let i in this.config.states) {
+            if (state === i) this.config.initial = i;
+        }
 
-    /**
-     * Goes to specified state.
-     * @param state
-     */
-    changeState(state) {}
+    }
+
 
     /**
      * Changes state according to event transition rules.
      * @param event
      */
-    trigger(event) {}
+    trigger(event) {
+        this.config.initial = this.config.states[this.getState()]
+        console.log(this.config.initial)
+        //.transitions[event]
+    }
 
     /**
      * Resets FSM state to initial.
      */
-    reset() {}
+    reset() {
+        this.config.initial = 'normal';
+    }
 
     /**
      * Returns an array of states for which there are specified event transition rules.
@@ -34,26 +43,26 @@ class FSM {
      * @param event
      * @returns {Array}
      */
-    getStates(event) {}
+    getStates(event) { }
 
     /**
      * Goes back to previous state.
      * Returns false if undo is not available.
      * @returns {Boolean}
      */
-    undo() {}
+    undo() { }
 
     /**
      * Goes redo to state.
      * Returns false if redo is not available.
      * @returns {Boolean}
      */
-    redo() {}
+    redo() { }
 
     /**
      * Clears transition history
      */
-    clearHistory() {}
+    clearHistory() { }
 }
 
 module.exports = FSM;
