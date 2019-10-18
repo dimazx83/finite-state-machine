@@ -145,7 +145,7 @@ describe('FSM', () => {
             const student = new FSM(config);
 
             student.trigger('study');
-            student.undo();
+        student.undo();
             expect(student.getState()).to.equal('normal');
 
             student.trigger('study');
